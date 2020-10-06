@@ -17,7 +17,10 @@ db.once('open', function () {
 })
 
 // Set up the models we want to use in our app
+const Booking = require('./booking')
 
 // Export everything
 module.exports = {
+    mongoose,
+    Booking
 }
