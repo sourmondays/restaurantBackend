@@ -33,7 +33,28 @@ const index = async (req, res) => {
  * GET /:bookingId
  */
 const show = async (req, res) => {
-	res.status(405).send({ status: 'fail', message: 'Method Not Implemented.' });
+	try {
+		const booking = await models.Booking.findById(req.params.bookingId);
+
+		// Have to change this one later on...
+		if (!booking) {
+			res.sendStatus(404);
+			return;
+		}
+		// Until here 
+
+		res.send({
+			status: 'success',
+			data: {
+				booking,
+			}
+		})
+	} catch (error) {
+		res.status(500).send({
+			status: 'error',
+			message: error.message
+		});
+	}
 }
 
 /**
@@ -53,7 +74,7 @@ const store = async (req, res) => {
 	} catch (error) {
 		res.status(500).send({
 			status: 'error',
-			message: 'Exeption thrown when trying to create new booking.'
+			message: error.message
 		});
 	}
 }
@@ -64,7 +85,28 @@ const store = async (req, res) => {
  * PUT /:bookingId
  */
 const update = async (req, res) => {
-	res.status(405).send({ status: 'fail', message: 'Method Not Implemented.' });
+	try {
+		const booking = await models.Booking.findByIdAndUpdate(req.params.bookingId, req.body, { new: true });
+
+		// Have to change this one later on...
+		if (!booking) {
+			res.sendStatus(404);
+			return;
+		}
+		// Until here 
+
+		res.send({
+			status: 'success',
+			data: {
+				booking,
+			}
+		})
+	} catch (error) {
+		res.status(500).send({
+			status: 'error',
+			message: error.message
+		});
+	}
 }
 
 /**
@@ -73,7 +115,28 @@ const update = async (req, res) => {
  * DELETE /:bookingId
  */
 const destroy = async (req, res) => {
-	res.status(405).send({ status: 'fail', message: 'Method Not Implemented.' });
+	try {
+		const booking = await models.Booking.findByIdAndRemove(req.params.bookingId);
+
+		// Have to change this one later on...
+		if (!booking) {
+			res.sendStatus(404);
+			return;
+		}
+		// Until here 
+
+		res.send({
+			status: 'success',
+			data: {
+				booking,
+			}
+		})
+	} catch (error) {
+		res.status(500).send({
+			status: 'error',
+			message: error.message
+		});
+	}
 }
 
 module.exports = {
