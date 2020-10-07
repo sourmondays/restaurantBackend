@@ -5,45 +5,72 @@
 const models = require('../models');
 
 /**
- * Get all tables
+ * Get all booking
  *
  * GET /
  */
 const index = async (req, res) => {
-	res.status(405).send({ status: 'fail', message: 'Method Not Implemented.' });
+	try {
+		const bookings = await models.Booking.find();
+
+		res.send({
+			status: 'success',
+			data: {
+				bookings,
+			}
+		})
+	} catch (error) {
+		res.status(500).send({
+			status: 'error',
+			message: 'Exeption thrown when trying to get all booking.'
+		});
+	}
 }
 
 /**
- * Get a table
+ * Get a booking
  *
- * GET /:tableId
+ * GET /:bookingId
  */
 const show = async (req, res) => {
 	res.status(405).send({ status: 'fail', message: 'Method Not Implemented.' });
 }
 
 /**
- * Create a new table
+ * Create a new booking
  *
  * POST /
  */
 const store = async (req, res) => {
-	res.status(405).send({ status: 'fail', message: 'Method Not Implemented.' });
+	try {
+		const booking = await new models.Booking(req.body).save();
+		res.status(201).send({
+			status: 'success',
+			data: {
+				booking,
+			}
+		})
+	} catch (error) {
+		res.status(500).send({
+			status: 'error',
+			message: 'Exeption thrown when trying to create new booking.'
+		});
+	}
 }
 
 /**
- * Update a table
+ * Update a booking
  *
- * PUT /:tableId
+ * PUT /:bookingId
  */
 const update = async (req, res) => {
 	res.status(405).send({ status: 'fail', message: 'Method Not Implemented.' });
 }
 
 /**
- * Delete a table
+ * Delete a booking
  *
- * DELETE /:tableId
+ * DELETE /:bookingId
  */
 const destroy = async (req, res) => {
 	res.status(405).send({ status: 'fail', message: 'Method Not Implemented.' });

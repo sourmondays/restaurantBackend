@@ -10,15 +10,15 @@ const tableController = require('../controllers/restaurant_controller');
 router.get('/', tableController.index);
 
 /* Get a tables */
-router.get('/:tableId', tableController.show);
+router.get('/:bookingId', tableController.show);
 
 /* Create a new table */
 router.post('/', tableController.store);
 
 /* Update a table */
-router.put('/:tableId', tableController.update);
+router.put('/:bookingId', tableController.update);
 
 /* Delete a table */
-router.delete('/:tableId', tableController.destroy);
+router.delete('/:bookingId', tableController.destroy);
 
 module.exports = router;

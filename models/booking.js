@@ -16,26 +16,26 @@ const BookingSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
-        minlength: 2
+        minlength: 2,
     },
     phone: {
         type: String,
         minlength: 5,
-        maxlength: 15
+        maxlength: 15,
     },
     email: {
         type: String,
         required: true,
-        minlength: 5
+        minlength: 5,
     },
     noPersons: {
         type: Number,
         min: 1,
-        max: 6
+        max: 6,
     },
     date: {
         type: Date,
-        default: Date.now()
+        default: Date.now(),
     },
     time: {
         type: String,
@@ -47,4 +47,4 @@ const BookingSchema = new mongoose.Schema({
 const Booking = mongoose.model('Booking', BookingSchema)
 
 // Export 
-module.exports.Booking
+module.exports = Booking; 
