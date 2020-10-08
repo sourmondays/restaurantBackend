@@ -4,6 +4,7 @@
 
 const debug = require('debug')('BackendRestaurant:restaurant-controller')
 const models = require('../models');
+const booking = require('../models/booking');
 
 
 /**
@@ -39,6 +40,7 @@ const show = async (req, res) => {
 		const booking = await models.Booking.findById(req.params.bookingId);
 
 		// Have to change this one later on...
+		// Only works if it's the exactly same lenght
 		if (!booking) {
 			res.sendStatus(404);
 			return;
@@ -56,6 +58,7 @@ const show = async (req, res) => {
 			status: 'error',
 			message: error.message
 		});
+		throw error;
 	}
 }
 

@@ -10,12 +10,14 @@ const AdminSchema = new mongoose.Schema({
         type: String,
         required: true,
         match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
-        minlength: 5
+        minlength: 5,
+        _id: String
     },
     password: {
         type: String,
         required: true,
-        minlength: 5
+        minlength: 5,
+        _id: String
     }
 });
 

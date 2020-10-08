@@ -20,7 +20,8 @@ const BookingSchema = new mongoose.Schema({
         minlength: 2,
     },
     phone: {
-        type: String,
+        type: Number,
+        required: true,
         minlength: 5,
         maxlength: 15,
     },
@@ -31,21 +32,23 @@ const BookingSchema = new mongoose.Schema({
     },
     noPersons: {
         type: Number,
+        required: true,
         min: 1,
         max: 6,
     },
     date: {
         type: Date,
         default: Date.now(),
+        required: true,
     },
     time: {
         type: String,
-        required: true
+        required: true,
     }
 });
 
 // Booking model 
-const Booking = mongoose.model('Booking', BookingSchema)
+const Booking = mongoose.model('Booking', BookingSchema);
 
 // Export booking 
 module.exports = Booking; 
