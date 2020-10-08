@@ -4,6 +4,7 @@
 
 const Admin = require('../models/admin');
 const mongoose = require("mongoose");
+const jwt = require('jsonwebtoken');
 const bcrypt = require("bcrypt");
 
 /**
@@ -76,6 +77,56 @@ const store = async (req, res) => {
 }
 
 /**
+ * Make a post to login admin
+ *
+ * POST /
+ */
+const storeLogin = async (req, res) => {
+    Admin.find({ email: req.body.email })
+        .exec()
+        .then(admin => {
+            if (admin.length < 1) {
+                return res.status(401).json({
+                    message: "Authorization failed."
+                });
+            }
+            bcrypt.compare(req.body.password, admin[0].password, (err, result) => {
+                if (err) {
+                    return res.status(401).json({
+                        message: "Authorization failed"
+                    });
+                }
+                if (result) {
+                    const token = jwt.sign(
+                        {
+                            email: admin[0].email,
+                            adminId: admin[0]._id
+                        },
+                        process.env.JWT_KEY,
+                        {
+                            expiresIn: "1h"
+                        }
+                    );
+                    return res.status(200).json({
+                        message: "Authorization successful.",
+                        token: token
+                    });
+                }
+                res.status(401).json({
+                    message: "Authorization failed."
+                });
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        });
+}
+
+
+/**
  * Update a admin
  *
  * PUT /:adminId
@@ -109,6 +160,7 @@ module.exports = {
     index,
     show,
     store,
+    storeLogin,
     update,
     destroy,
 }

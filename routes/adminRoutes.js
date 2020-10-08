@@ -15,6 +15,9 @@ router.get('/:adminId', adminController.show);
 /* Create a new admin */
 router.post('/', adminController.store);
 
+/* Make a post to login admin */
+router.post('/login', adminController.storeLogin);
+
 /* Update a admin */
 router.put('/:adminId', adminController.update);
 
