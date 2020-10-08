@@ -2,12 +2,14 @@
  * Restaurant Controller 
  */
 
+const debug = require('debug')('BackendRestaurant:restaurant-controller')
 const models = require('../models');
+
 
 /**
  * Get all booking
  *
- * GET /
+ * GET / This one is for the admin, to see who reserved a table.
  */
 const index = async (req, res) => {
 	try {
@@ -30,7 +32,7 @@ const index = async (req, res) => {
 /**
  * Get a booking
  *
- * GET /:bookingId
+ * GET /:bookingId / This one is for the admin, to see a specific reservation.
  */
 const show = async (req, res) => {
 	try {
@@ -60,11 +62,13 @@ const show = async (req, res) => {
 /**
  * Create a new booking
  *
- * POST /
+ * POST / This one is for a customer that want to make a reservation at the restaurant.
  */
 const store = async (req, res) => {
 	try {
 		const booking = await new models.Booking(req.body).save();
+		debug('New reservation created: %j', req.body);
+
 		res.status(201).send({
 			status: 'success',
 			data: {
@@ -82,7 +86,7 @@ const store = async (req, res) => {
 /**
  * Update a booking
  *
- * PUT /:bookingId
+ * PUT /:bookingId / This one is for the admin, to update/change a already existing reservation. 
  */
 const update = async (req, res) => {
 	try {
@@ -112,7 +116,7 @@ const update = async (req, res) => {
 /**
  * Delete a booking
  *
- * DELETE /:bookingId
+ * DELETE /:bookingId / This one is for the admin, to delete a already existing reservation.
  */
 const destroy = async (req, res) => {
 	try {

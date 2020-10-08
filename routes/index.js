@@ -6,7 +6,7 @@ router.get('/', (req, res) => {
 	res.send({ status: 'success' });
 });
 
-router.use('/restaurant', require('./restaurantRoutes'));
+router.use('/booking', require('./restaurantRoutes'));
 
 router.use('/admin', require('./adminRoutes'));
 
