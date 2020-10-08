@@ -35,7 +35,7 @@ const store = async (req, res) => {
         .then(admin => {
             if (admin.length >= 1) {
                 return res.status(422).json({
-                    message: "This admin already exist"
+                    message: "This admin already exist."
                 });
             } else {
                 bcrypt.hash(req.body.password, 10, (err, hash) => {
@@ -54,7 +54,7 @@ const store = async (req, res) => {
                             .then(result => {
                                 console.log(result);
                                 res.status(200).json({
-                                    message: "Admin created succesfully"
+                                    message: "Admin created succesfully."
                                 });
                             })
                             .catch(error => {
@@ -84,7 +84,16 @@ const update = async (req, res) => {
  * DELETE /:adminId
  */
 const destroy = async (req, res) => {
-    res.status(405).send({ status: 'fail', message: 'Method Not Implemented.' });
+    Admin.findOneAndDelete(req.params.adminId).exec().then(result => {
+        res.status(200).json({
+            message: "Eliminated admin."
+        })
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        })
+    });
 }
 
 module.exports = {
