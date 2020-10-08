@@ -6,8 +6,8 @@ router.get('/', (req, res) => {
 	res.send({ status: 'success' });
 });
 
-router.use('/booking', require('./restaurantRoutes'));
 
+router.use('/booking', require('./restaurantRoutes'));
 router.use('/admin', require('./adminRoutes'));
 
 module.exports = router;
