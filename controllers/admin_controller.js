@@ -12,7 +12,10 @@ const bcrypt = require("bcrypt");
  * GET /
  */
 const index = async (req, res) => {
-    res.status(405).send({ status: 'fail', message: 'Method Not Implemented.' });
+    res.status(405).send({
+        status: 'fail',
+        message: 'Method Not Allowed.',
+    });
 }
 
 /**
@@ -21,7 +24,10 @@ const index = async (req, res) => {
  * GET /:adminId
  */
 const show = async (req, res) => {
-    res.status(405).send({ status: 'fail', message: 'Method Not Implemented.' });
+    res.status(405).send({
+        status: 'fail',
+        message: 'Method Not Allowed.',
+    });
 }
 
 /**
@@ -75,7 +81,10 @@ const store = async (req, res) => {
  * PUT /:adminId
  */
 const update = async (req, res) => {
-    res.status(405).send({ status: 'fail', message: 'Method Not Implemented.' });
+    res.status(405).send({
+        status: 'fail',
+        message: 'Method Not Allowed.',
+    });
 }
 
 /**
