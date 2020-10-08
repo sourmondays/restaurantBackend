@@ -40,7 +40,6 @@ const show = async (req, res) => {
 		const booking = await models.Booking.findById(req.params.bookingId);
 
 		// Have to change this one later on...
-		// Only works if it's the exactly same lenght
 		if (!booking) {
 			res.sendStatus(404);
 			return;
