@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 
 // Booking Schema 
 const BookingSchema = new mongoose.Schema({
-
+    _id: mongoose.Schema.Types.ObjectId,
     firstName: {
         type: String,
         required: true,
@@ -20,7 +20,7 @@ const BookingSchema = new mongoose.Schema({
         minlength: 2,
     },
     phone: {
-        type: Number,
+        type: String,
         required: true,
         minlength: 5,
         maxlength: 15,
@@ -28,6 +28,7 @@ const BookingSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
+        match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
         minlength: 5,
     },
     noPersons: {

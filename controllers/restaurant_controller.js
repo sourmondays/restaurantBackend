@@ -4,8 +4,7 @@
 
 const debug = require('debug')('BackendRestaurant:restaurant-controller')
 const models = require('../models');
-const booking = require('../models/booking');
-
+const mongoose = require('mongoose');
 
 /**
  * Get all booking
@@ -13,21 +12,21 @@ const booking = require('../models/booking');
  * GET / This one is for the admin, to see who reserved a table.
  */
 const index = async (req, res) => {
-	try {
-		const bookings = await models.Booking.find();
-
-		res.send({
+	models.Booking.find().exec().then(bookings => {
+		console.log(bookings);
+		res.status(201).send({
 			status: 'success',
 			data: {
-				bookings,
+				bookings
 			}
 		})
-	} catch (error) {
+	}).catch(err => {
+		console.log(err);
 		res.status(500).send({
 			status: 'error',
-			message: 'Exeption thrown when trying to get all booking.'
+			error: err
 		});
-	}
+	})
 }
 
 /**
@@ -36,29 +35,33 @@ const index = async (req, res) => {
  * GET /:bookingId / This one is for the admin, to see a specific reservation.
  */
 const show = async (req, res) => {
-	try {
-		const booking = await models.Booking.findById(req.params.bookingId);
-
-		// Have to change this one later on...
-		if (!booking) {
-			res.sendStatus(404);
-			return;
-		}
-		// Until here 
-
-		res.send({
-			status: 'success',
-			data: {
-				booking,
+	const id = req.params.bookingId;
+	models.Booking.findById(id)
+		.exec()
+		.then(booking => {
+			console.log("DB", booking);
+			if (booking) {
+				res.status(201).send({
+					status: 'success',
+					data: {
+						booking
+					}
+				})
+			} else {
+				res.status(404).send({
+					status: 'error',
+					message: "Reservation with this id dosn't exist."
+				});
 			}
 		})
-	} catch (error) {
-		res.status(500).send({
-			status: 'error',
-			message: error.message
+		.catch(err => {
+			console.log(err);
+			res.status(500).send({
+				status: 'error',
+				message: "Id dosn't match, invalid ObjectId.",
+				error: err
+			});
 		});
-		throw error;
-	}
 }
 
 /**
@@ -67,22 +70,35 @@ const show = async (req, res) => {
  * POST / This one is for a customer that want to make a reservation at the restaurant.
  */
 const store = async (req, res) => {
-	try {
-		const booking = await new models.Booking(req.body).save();
-		debug('New reservation created: %j', req.body);
-
-		res.status(201).send({
-			status: 'success',
-			data: {
-				booking,
-			}
+	debug('New reservation created: %j', req.body);
+	const booking = new models.Booking({
+		_id: new mongoose.Types.ObjectId(),
+		firstName: req.body.firstName,
+		lastName: req.body.lastName,
+		phone: req.body.phone,
+		email: req.body.email,
+		noPersons: req.body.noPersons,
+		date: req.body.date,
+		time: req.body.time
+	});
+	booking
+		.save()
+		.then(booking => {
+			console.log(booking);
+			res.status(201).send({
+				status: 'success',
+				data: {
+					booking
+				}
+			})
 		})
-	} catch (error) {
-		res.status(500).send({
-			status: 'error',
-			message: error.message
+		.catch(err => {
+			console.log(err);
+			res.status(500).send({
+				status: 'error',
+				error: err
+			});
 		});
-	}
 }
 
 /**
@@ -92,14 +108,12 @@ const store = async (req, res) => {
  */
 const update = async (req, res) => {
 	try {
-		const booking = await models.Booking.findByIdAndUpdate(req.params.bookingId, req.body, { new: true });
+		const booking = await models.Booking.findOneAndUpdate(req.params.bookingId, req.body, { new: true });
 
-		// Have to change this one later on...
 		if (!booking) {
 			res.sendStatus(404);
 			return;
 		}
-		// Until here 
 
 		res.send({
 			status: 'success',
@@ -124,12 +138,10 @@ const destroy = async (req, res) => {
 	try {
 		const booking = await models.Booking.findByIdAndRemove(req.params.bookingId);
 
-		// Have to change this one later on...
 		if (!booking) {
 			res.sendStatus(404);
 			return;
 		}
-		// Until here 
 
 		res.send({
 			status: 'success',

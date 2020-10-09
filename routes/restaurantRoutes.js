@@ -6,19 +6,19 @@ const express = require('express');
 const router = express.Router();
 const bookingController = require('../controllers/restaurant_controller');
 
-/* Get all tables */
+/* Get all bookings */
 router.get('/', bookingController.index);
 
-/* Get a tables */
+/* Get a booking */
 router.get('/:bookingId', bookingController.show);
 
-/* Create a new table */
+/* Create a new booking */
 router.post('/', bookingController.store);
 
-/* Update a table */
+/* Update a booking */
 router.put('/:bookingId', bookingController.update);
 
-/* Delete a table */
+/* Delete a booking */
 router.delete('/:bookingId', bookingController.destroy);
 
 module.exports = router;
