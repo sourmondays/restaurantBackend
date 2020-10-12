@@ -6,16 +6,10 @@ const express = require('express');
 const router = express.Router();
 const seatsController = require('../controllers/seats_contoller');
 
-/* Get all admins */
+/* Get seating */
 router.get('/', seatsController.index);
 
-/* Make a post to login admin */
+/* Create/update a new seating with max people */
 router.post('/', seatsController.store);
-
-/* Update a admin */
-router.put('/:seats', seatsController.update);
-
-/* Delete a admin */
-router.delete('/:seatId', seatsController.destroy);
 
 module.exports = router; 

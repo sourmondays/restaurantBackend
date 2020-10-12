@@ -13,7 +13,6 @@ const SeatsSchema = new mongoose.Schema({
     timestamps: true
 })
 
-
 // Booking model 
 const Seats = mongoose.model('Seats', SeatsSchema);
 

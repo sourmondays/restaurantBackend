@@ -27,20 +27,9 @@ const index = async (req, res) => {
     })
 }
 
-/**
- * Get a seating
- *
- * GET /:seatingId
- */
-const show = async (req, res) => {
-    res.status(405).send({
-        status: 'fail',
-        message: 'Method Not Allowed.',
-    });
-}
 
 /**
- * Create a new seating with max people
+ * Create/update a new seating with max people
  *
  * POST /
  */
@@ -59,35 +48,7 @@ const store = async (req, res) => {
         })
 }
 
-
-/**
- * Update a seating
- *
- * PUT /:seatsId
- */
-const update = async (req, res) => {
-    res.status(405).send({
-        status: 'fail',
-        message: 'Method Not Allowed.',
-    });
-}
-
-/**
- * Delete a seat
- *
- * DELETE /:seatId
- */
-const destroy = async (req, res) => {
-    res.status(405).send({
-        status: 'fail',
-        message: 'Method Not Allowed.',
-    });
-}
-
 module.exports = {
     index,
-    show,
     store,
-    update,
-    destroy,
 }
