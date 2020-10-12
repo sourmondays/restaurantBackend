@@ -30,7 +30,7 @@ const index = async (req, res) => {
 }
 
 /**
- * Get a booking
+ * Get a booking based on id
  *
  * GET /:bookingId / This one is for the admin, to see a specific reservation.
  */
@@ -65,6 +65,30 @@ const show = async (req, res) => {
 }
 
 /**
+ * Get a booking based on date 
+ *
+ * GET /:date / This one is for the admin, to see a specific reservation on a specific date.
+ */
+const showDate = async (req, res) => {
+	models.Booking.find({
+		"date": req.params.date
+	}).then(booking => {
+		console.log('Booking ', booking)
+		res.status(201).send({
+			status: 'success',
+			data: {
+				booking
+			}
+		})
+	}).catch(err => {
+		res.status(500).send({
+			status: 'error',
+			error: err
+		})
+	})
+}
+
+/**
  * Create a new booking
  *
  * POST / This one is for a customer that want to make a reservation at the restaurant.
@@ -78,7 +102,7 @@ const store = async (req, res) => {
 		phone: req.body.phone,
 		email: req.body.email,
 		noPersons: req.body.noPersons,
-		date: req.body.date,
+		date: Date.parse(req.body.date),
 		time: req.body.time
 	});
 	booking
@@ -161,6 +185,7 @@ module.exports = {
 	index,
 	show,
 	store,
+	showDate,
 	update,
 	destroy,
 }

@@ -3,6 +3,8 @@
  */
 
 const mongoose = require('mongoose');
+const slug = require('mongoose-slug-generator');
+mongoose.plugin(slug);
 
 // Booking Schema 
 const BookingSchema = new mongoose.Schema({
@@ -12,6 +14,10 @@ const BookingSchema = new mongoose.Schema({
         required: true,
         trim: true,
         minlength: 2,
+    },
+    slug: {
+        type: String,
+        slug: 'firstName',
     },
     lastName: {
         type: String,
@@ -44,9 +50,12 @@ const BookingSchema = new mongoose.Schema({
     },
     time: {
         type: String,
-        required: true,
+        required: true
     }
-});
+}, {
+    timestamps: true
+})
+
 
 // Booking model 
 const Booking = mongoose.model('Booking', BookingSchema);
