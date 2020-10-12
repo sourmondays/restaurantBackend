@@ -83,7 +83,8 @@ const showDate = async (req, res) => {
 	}).catch(err => {
 		res.status(500).send({
 			status: 'error',
-			error: err
+			message: "There are no booking formatted this way, try search for YYYY-MM-DD.",
+			error: err,
 		})
 	})
 }

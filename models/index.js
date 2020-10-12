@@ -20,10 +20,12 @@ db.once('open', function () {
 // Set up the models we want to use in our app
 const Booking = require('./booking')
 const Admin = require('./admin');
+const Seats = require('./seats');
 
 // Export everything
 module.exports = {
     mongoose,
     Booking,
-    Admin
+    Admin,
+    Seats
 }
