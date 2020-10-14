@@ -14,7 +14,7 @@ const mongoose = require('mongoose');
 const index = async (req, res) => {
 	models.Booking.find().exec().then(bookings => {
 		console.log(bookings);
-		res.status(201).send({
+		res.status(200).send({
 			status: 'success',
 			data: {
 				bookings
@@ -41,7 +41,7 @@ const show = async (req, res) => {
 		.then(booking => {
 			console.log("DB", booking);
 			if (booking) {
-				res.status(201).send({
+				res.status(200).send({
 					status: 'success',
 					data: {
 						booking
@@ -74,7 +74,7 @@ const showDate = async (req, res) => {
 		"date": req.params.date
 	}).then(booking => {
 		console.log('Booking ', booking)
-		res.status(201).send({
+		res.status(200).send({
 			status: 'success',
 			data: {
 				booking
@@ -84,6 +84,29 @@ const showDate = async (req, res) => {
 		res.status(500).send({
 			status: 'error',
 			message: "There are no booking formatted this way, try search for YYYY-MM-DD.",
+			error: err,
+		})
+	})
+}
+
+/**
+ * Get a booking based on date & time
+ *
+ * GET /:date / This one is for the admin, to see a specific reservation on a specific date and time.
+ */
+const showDateTime = async (req, res) => {
+	models.Booking.find({ date: req.params.date, time: req.params.time }).then(booking => {
+		console.log('Booking ', booking)
+		res.status(200).send({
+			status: 'success',
+			data: {
+				booking
+			}
+		})
+	}).catch(err => {
+		res.status(500).send({
+			status: 'error',
+			message: "There are no booking formatted this way, try search for YYYY-MM-DD/00:00.",
 			error: err,
 		})
 	})
@@ -187,6 +210,7 @@ module.exports = {
 	show,
 	store,
 	showDate,
+	showDateTime,
 	update,
 	destroy,
 }
