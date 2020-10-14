@@ -7,7 +7,7 @@ router.get('/', (req, res) => {
 });
 
 
-router.use('/booking', require('./restaurantRoutes'));
+router.use('/bookings', require('./restaurantRoutes'));
 router.use('/admin', require('./adminRoutes'));
 router.use('/seats', require('./seatsRoute'));
 

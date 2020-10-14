@@ -38,13 +38,13 @@ const show = async (req, res) => {
 	const id = req.params.bookingId;
 	models.Booking.findById(id)
 		.exec()
-		.then(booking => {
-			console.log("DB", booking);
-			if (booking) {
+		.then(bookings => {
+			console.log("DB", bookings);
+			if (bookings) {
 				res.status(200).send({
 					status: 'success',
 					data: {
-						booking
+						bookings
 					}
 				})
 			} else {
@@ -72,12 +72,12 @@ const show = async (req, res) => {
 const showDate = async (req, res) => {
 	models.Booking.find({
 		"date": req.params.date
-	}).then(booking => {
-		console.log('Booking ', booking)
+	}).then(bookings => {
+		console.log('Booking ', bookings)
 		res.status(200).send({
 			status: 'success',
 			data: {
-				booking
+				bookings
 			}
 		})
 	}).catch(err => {
@@ -95,12 +95,12 @@ const showDate = async (req, res) => {
  * GET /:date / This one is for the admin, to see a specific reservation on a specific date and time.
  */
 const showDateTime = async (req, res) => {
-	models.Booking.find({ date: req.params.date, time: req.params.time }).then(booking => {
-		console.log('Booking ', booking)
+	models.Booking.find({ date: req.params.date, time: req.params.time }).then(bookings => {
+		console.log('Booking ', bookings)
 		res.status(200).send({
 			status: 'success',
 			data: {
-				booking
+				bookings
 			}
 		})
 	}).catch(err => {
@@ -131,12 +131,12 @@ const store = async (req, res) => {
 	});
 	booking
 		.save()
-		.then(booking => {
-			console.log(booking);
+		.then(bookings => {
+			console.log(bookings);
 			res.status(201).send({
 				status: 'success',
 				data: {
-					booking
+					bookings
 				}
 			})
 		})
@@ -156,9 +156,9 @@ const store = async (req, res) => {
  */
 const update = async (req, res) => {
 	try {
-		const booking = await models.Booking.findOneAndUpdate(req.params.bookingId, req.body, { new: true });
+		const bookings = await models.Booking.findOneAndUpdate(req.params.bookingId, req.body, { new: true });
 
-		if (!booking) {
+		if (!bookings) {
 			res.sendStatus(404);
 			return;
 		}
@@ -166,7 +166,7 @@ const update = async (req, res) => {
 		res.send({
 			status: 'success',
 			data: {
-				booking,
+				bookings,
 			}
 		})
 	} catch (error) {
@@ -184,9 +184,9 @@ const update = async (req, res) => {
  */
 const destroy = async (req, res) => {
 	try {
-		const booking = await models.Booking.findByIdAndRemove(req.params.bookingId);
+		const bookings = await models.Booking.findByIdAndRemove(req.params.bookingId);
 
-		if (!booking) {
+		if (!bookings) {
 			res.sendStatus(404);
 			return;
 		}
@@ -194,7 +194,7 @@ const destroy = async (req, res) => {
 		res.send({
 			status: 'success',
 			data: {
-				booking,
+				bookings,
 			}
 		})
 	} catch (error) {
