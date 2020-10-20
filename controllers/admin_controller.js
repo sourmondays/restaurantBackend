@@ -6,6 +6,9 @@ const Admin = require('../models/admin');
 const mongoose = require("mongoose");
 const jwt = require('jsonwebtoken');
 const bcrypt = require("bcrypt");
+const { matchedData, validationResult } = require('express-validator');
+const debug = require('debug')('halp:admin_controller');
+const config = require('../config');
 
 /**
  * Get all admins
@@ -37,43 +40,46 @@ const show = async (req, res) => {
  * POST /
  */
 const store = async (req, res) => {
-    Admin.find({ email: req.body.email })
-        .exec()
-        .then(admin => {
-            if (admin.length >= 1) {
-                return res.status(422).json({
-                    message: "This admin already exist."
-                });
-            } else {
-                bcrypt.hash(req.body.password, 10, (err, hash) => {
-                    if (err) {
-                        return res.status(500).json({
-                            error: err
-                        });
-                    } else {
-                        const admin = new Admin({
-                            _id: new mongoose.Types.ObjectId(),
-                            email: req.body.email,
-                            password: hash
-                        });
-                        admin
-                            .save()
-                            .then(result => {
-                                console.log(result);
-                                res.status(200).json({
-                                    message: "Admin created succesfully."
-                                });
-                            })
-                            .catch(error => {
-                                console.log(error);
-                                res.status(500).json({
-                                    error: error.message
-                                });
-                            });
-                    }
-                });
+    let hash;
+
+    try {
+        hash = await bcrypt.hash(req.body.password, config.PASSWORD_HASH_ROUNDS);
+
+    } catch (error) {
+        debug("Exception thrown when hashing the password:", error);
+        return res.status(500).send({
+            status: 'error',
+            message: 'Exception thrown when hashing the password.',
+        });
+    }
+
+    try {
+        const admin = await new Admin({
+            email: req.body.email,
+            password: hash,
+        }).save();
+
+        if (!admin) {
+            return res.status(500).send({
+                status: 'error',
+                message: 'Admin could not be created!',
+            });
+        }
+
+        return res.send({
+            status: 'success',
+            data: {
+                admin,
             }
         });
+    } catch (error) {
+        return res.status(500).send({
+            status: error,
+            message: 'Admin could not be created.'
+        })
+    }
+
+    return res.status(405).send({ status: 'error', message: 'Not implemented' })
 }
 
 /**
@@ -82,47 +88,44 @@ const store = async (req, res) => {
  * POST /
  */
 const storeLogin = async (req, res) => {
-    Admin.find({ email: req.body.email })
-        .exec()
-        .then(admin => {
-            if (admin.length < 1) {
-                return res.status(401).json({
-                    message: "Authorization failed."
-                });
-            }
-            bcrypt.compare(req.body.password, admin[0].password, (err, result) => {
-                if (err) {
-                    return res.status(401).json({
-                        message: "Authorization failed"
-                    });
-                }
-                if (result) {
-                    const token = jwt.sign(
-                        {
-                            email: admin[0].email,
-                            adminId: admin[0]._id
-                        },
-                        process.env.JWT_KEY,
-                        {
-                            expiresIn: "1h"
-                        }
-                    );
-                    return res.status(200).json({
-                        message: "Authorization successful.",
-                        token: token
-                    });
-                }
-                res.status(401).json({
-                    message: "Authorization failed."
-                });
+    let admin;
+    try {
+        admin = await Admin.findOne({ email: req.body.email });
+
+        if (!admin) {
+            return res.status(403).send({
+                status: 'fail',
+                message: 'Authentication failed.'
             });
+        }
+    } catch (error) {
+        return res.status(500).send({
+            status: 'error',
+            message: 'Authentication failed.'
         })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({
-                error: err
-            });
-        });
+    }
+
+    if (!await bcrypt.compare(req.body.password, admin.password)) {
+        return res.status(405).send({
+            status: 'error',
+            message: 'Authentication failed.'
+        })
+    }
+
+    const payload = {
+        data: admin,
+    }
+
+    const access_token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
+        expiresIn: process.env.ACCESS_TOKEN_LIFETIME || '1h'
+    });
+
+    return res.status(200).send({
+        status: 'success',
+        data: {
+            access_token,
+        },
+    })
 }
 
 

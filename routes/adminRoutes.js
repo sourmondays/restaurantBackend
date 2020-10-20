@@ -24,4 +24,6 @@ router.put('/:adminId', adminController.update);
 /* Delete a admin */
 router.delete('/:adminId', adminController.destroy);
 
+/* Routes that only admin have access to */
+
 module.exports = router; 

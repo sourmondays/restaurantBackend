@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 
 // Booking Schema 
 const SeatsSchema = new mongoose.Schema({
-    maxSeats: String,
+    maxSeats: Number,
     firstSeating: String,
     secoundSeating: String
 }, {

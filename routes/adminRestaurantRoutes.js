@@ -4,7 +4,7 @@
 
 const express = require('express');
 const router = express.Router();
-const bookingController = require('../controllers/restaurant_controller');
+const bookingController = require('../controllers/admin_restaurant_controller');
 
 /* Get all bookings */
 router.get('/', bookingController.index);
