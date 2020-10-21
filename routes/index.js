@@ -13,6 +13,6 @@ router.get('/', (req, res) => {
 router.use('/adminbookings', [validateJwtToken], require('./adminRestaurantRoutes'));
 router.use('/bookings', require('./bookingRoutes'))
 router.use('/admin', require('./adminRoutes'));
-router.use('/seats', [validateJwtToken], require('./seatsRoute'));
+router.use('/seats', require('./seatsRoute'));
 
 module.exports = router;
