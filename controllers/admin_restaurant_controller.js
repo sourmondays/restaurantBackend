@@ -156,7 +156,7 @@ const store = async (req, res) => {
  */
 const update = async (req, res) => {
 	try {
-		const bookings = await models.Booking.findOneAndUpdate(req.params.bookingId, req.body, { new: true });
+		const bookings = await models.Booking.findByIdAndUpdate(req.params.bookingId, req.body);
 
 		if (!bookings) {
 			res.sendStatus(404);
