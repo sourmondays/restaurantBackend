@@ -12,7 +12,7 @@ const models = require('../models');
 const index = async (req, res) => {
     models.Seats.find().exec().then(seats => {
         console.log(seats);
-        res.status(201).send({
+        res.status(200).send({
             status: 'success',
             data: {
                 seats
@@ -26,7 +26,6 @@ const index = async (req, res) => {
         });
     })
 }
-
 
 /**
  * Create/update a new seating with max people

@@ -36,10 +36,23 @@ const show = async (req, res) => {
  * GET /:date / This one is for the admin, to see a specific reservation on a specific date.
  */
 const showDate = async (req, res) => {
-    res.status(405).send({
-        status: 'fail',
-        message: 'Method Not Allowed.',
-    });
+    models.Booking.find({
+        "date": req.params.date
+    }).then(bookings => {
+        console.log('Booking ', bookings)
+        res.status(200).send({
+            status: 'success',
+            data: {
+                bookings
+            }
+        })
+    }).catch(err => {
+        res.status(500).send({
+            status: 'error',
+            message: "There are no booking formatted this way, try search for YYYY-MM-DD.",
+            error: err,
+        })
+    })
 }
 
 /**
